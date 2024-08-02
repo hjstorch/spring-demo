@@ -24,7 +24,8 @@ public class WebLoggingInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
         if(null != modelAndView) {
-            log.debug("View is: {}", modelAndView.getView().toString());
+            String viewName = modelAndView.getViewName();
+            log.debug("View is: {}", viewName);
             log.debug("Model is: {}", modelAndView.getModel());
         }
     }

@@ -1,6 +1,7 @@
 package de.sopracss.demo.user;
 
 import de.sopracss.demo.exception.WebExceptionHandler;
+import de.sopracss.demo.quote.QuoteService;
 import de.sopracss.demo.security.WebSecurityConfig;
 import de.sopracss.demo.user.model.User;
 import de.sopracss.demo.user.service.UserService;
@@ -51,6 +52,9 @@ public class UserControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    QuoteService quoteService; // this should not be necessary
 
     @BeforeEach
     void setUp() {
