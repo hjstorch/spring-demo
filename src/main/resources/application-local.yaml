@@ -1,0 +1,5 @@
+demo.greeting: こんにちわ
+
+logging:
+  level:
+    de.sopracss.demo.interceptor.de.sopracss.demo.interceptor.WebLoggingInterceptor: DEBUG
