@@ -32,6 +32,6 @@ public class UserServiceITest {
     @Test
     void testAddUser() {
         userService.addUser(new User("jndoe","Jane", "Doe", "jane@doe.org"));
-        assertTrue(userService.listUsers().isEmpty());
+        assertFalse(userService.listUsers().isEmpty());
     }
 }
