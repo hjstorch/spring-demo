@@ -15,7 +15,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 @Import({BadNameFilter.class, QuoteService.class})
 @AutoConfigureMockMvc
-public class GreetingControllerTest {
+class GreetingControllerTest {
 
     @Autowired
     MockMvc client;
@@ -44,7 +43,7 @@ public class GreetingControllerTest {
 
     @Test
     @WithMockUser
-    public void testControllerFunctionWithView() throws Exception {
+    void testControllerFunctionWithView() throws Exception {
         client.perform(get("/greeting/John"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("username", "John"))
@@ -53,14 +52,14 @@ public class GreetingControllerTest {
 
     @Test
     @WithMockUser
-    public void testControllerFunctionNoName() throws Exception {
+    void testControllerFunctionNoName() throws Exception {
         client.perform(get("/greeting/"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser
-    public void testControllerRestFunction() throws Exception {
+    void testControllerRestFunction() throws Exception {
         client.perform(get("/greetingRest").param("myname", "John"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Guude, John"));
@@ -68,7 +67,7 @@ public class GreetingControllerTest {
 
     @Test
     @WithMockUser
-    public void testControllerRestFunctionWithProperty() throws Exception {
+    void testControllerRestFunctionWithProperty() throws Exception {
         System.setProperty("demo.greeting", "Hola,");
         client.perform(get("/greetingRest").param("myname", "John"))
                 .andExpect(status().isOk())
@@ -77,7 +76,7 @@ public class GreetingControllerTest {
 
     @Test
     @WithMockUser
-    public void testControllerRestFunctionWithBadProperty() throws Exception {
+    void testControllerRestFunctionWithBadProperty() throws Exception {
         client.perform(get("/greetingRest").param("myname", "bad"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Guude, World"));
@@ -85,7 +84,7 @@ public class GreetingControllerTest {
 
     @Test
     @WithMockUser
-    public void testControllerRestFunctionWithNoProperty() throws Exception {
+    void testControllerRestFunctionWithNoProperty() throws Exception {
         client.perform(get("/greetingRest"))
                 .andExpect(status().isNotFound());
     }

@@ -8,11 +8,11 @@ import org.springframework.web.client.RestTemplate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class QuoteServiceTest {
+class QuoteServiceTest {
 
-    RestTemplate restTemplateMock = Mockito.mock(RestTemplate.class);
+    private final RestTemplate restTemplateMock = Mockito.mock(RestTemplate.class);
 
-    QuoteService quoteService;
+    private QuoteService quoteService;
 
     @BeforeEach
     public void init() {
@@ -22,7 +22,7 @@ public class QuoteServiceTest {
     }
 
     @Test
-    public void testGetRandomQuote() {
+    void testGetRandomQuote() {
         String quote = quoteService.getQuote();
         assertEquals("Test Quote", quote);
     }

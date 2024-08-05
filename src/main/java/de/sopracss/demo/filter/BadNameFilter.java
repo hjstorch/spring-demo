@@ -1,12 +1,10 @@
 package de.sopracss.demo.filter;
 
+
 import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Map;
 
 @Component
 public class BadNameFilter implements Filter {
