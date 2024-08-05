@@ -44,7 +44,7 @@ public class UserService {
         );
     }
 
-    public void saveUsers() throws IOException {
+    private void saveUsers() throws IOException {
         log.info("Saving users to: {}", userfile.getFilename());
         mapper.writeValue(userfile.getFile(), List.copyOf(users.values()));
     }
@@ -58,6 +58,11 @@ public class UserService {
             throw new IllegalArgumentException("User already exists");
         }
         users.put(user.getUsername(),user);
+        try {
+            this.saveUsers();
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Could not save user", e);
+        }
     }
 
     public User getUser(String username) throws NoSuchElementException, IOException {

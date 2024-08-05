@@ -17,22 +17,21 @@ public class UserServiceITest {
     UserService userService;
 
     @Test
-    public void testAddExistingUser() {
+    void testAddExistingUser() {
         assertThrows(IllegalArgumentException.class, () -> {
             userService.addUser(new User("jdoe","John", "Doe", "john@doe.org"));
-            userService.saveUsers();
         });
     }
 
     @Test
-    public void testListUser(){
+    void testListUser(){
         List<User> users = userService.listUsers();
         assertFalse(users.isEmpty());
     }
 
     @Test
-    public void testAddUser() throws IOException {
+    void testAddUser() {
         userService.addUser(new User("jndoe","Jane", "Doe", "jane@doe.org"));
-        userService.saveUsers();
+        assertTrue(userService.listUsers().isEmpty());
     }
 }
