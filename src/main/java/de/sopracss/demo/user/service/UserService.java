@@ -4,6 +4,7 @@ import de.sopracss.demo.user.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +17,7 @@ import java.util.*;
 @Scope("singleton")
 @Qualifier("contextQualifier")
 @Component("userService")
+@Slf4j
 public class UserService {
 
     private Map<String, User> users = new HashMap<>();
@@ -30,7 +32,7 @@ public class UserService {
 
     @PostConstruct // alternative activate UserLoader
     public void loadUsers() throws IOException {
-        System.out.println("Loading users from: " + userfile.getFilename());
+        log.info("Loading users from: {}", userfile.getFilename());
         List<User> loadedUsers =  mapper.readValue(
                 userfile.getContentAsByteArray(),
                 new TypeReference<List<User>>() {}
@@ -43,8 +45,7 @@ public class UserService {
     }
 
     public void saveUsers() throws IOException {
-        System.out.println("Saving users to: " + userfile.getFilename());
-        ObjectMapper mapper = new ObjectMapper();
+        log.info("Saving users to: {}", userfile.getFilename());
         mapper.writeValue(userfile.getFile(), List.copyOf(users.values()));
     }
 
