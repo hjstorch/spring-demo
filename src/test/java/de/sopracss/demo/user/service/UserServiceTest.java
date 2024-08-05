@@ -28,7 +28,7 @@ class UserServiceTest {
     @BeforeEach
     public void setUp() throws IOException {
         when(mockResource.getFilename()).thenReturn("users.json");
-        when(mockResource.getFile()).thenReturn(new File("users.json"));
+        when(mockResource.getFile()).thenReturn(new File("build/resources/test/users.json"));
         when(mockResource.getContentAsByteArray()).thenReturn(userJsonExisting.getBytes());
         sut = new UserService(mockResource, mockMapper);
         sut.loadUsers(); // is done by SpringBoot in real application
