@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 @ActiveProfiles("unittest")
 class QuoteServiceITest {
+
     @Autowired
     QuoteService quoteService;
 

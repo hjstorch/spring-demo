@@ -27,6 +27,4 @@ public class QuoteServiceTest {
         assertEquals("Test Quote", quote);
     }
 
-
-
 }

@@ -53,13 +53,17 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
 
+    // this should not be necessary as it is not used in the UserController‚
+    // there is maybe a bug in spring test also loading the GreetingController
+    // even this test is restricted to UserController.class
     @MockBean
-    QuoteService quoteService; // this should not be necessary
+    QuoteService quoteService;
 
     @BeforeEach
     void setUp() {
         when(userService.listUsers())
                 .thenReturn(List.of(new User("jndoe","Jane", "Doe", "jane@doe.xy")));
+        // here we use doThrow.when instead of when.thenThrow because the Function is void
         doThrow(new IllegalArgumentException("User already exists")).when(userService).addUser(argThat((User u) -> "jndoe".equals(u.getUsername())));
     }
 
@@ -71,7 +75,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"USER", "ADMIN"})
+    @WithMockUser(roles = {"USER", "ADMIN"}) // needs both roles to satisfy the @PreAuthorize("hasRole('ADMIN')") and Matcher in WebSecurityConfig
     public void testUserAdd() throws Exception {
         client.perform(put("/user").contentType(MediaType.APPLICATION_JSON).content(userJson))
                 .andExpect(status().isOk());
