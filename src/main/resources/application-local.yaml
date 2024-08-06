@@ -1,5 +1,9 @@
 demo.greeting: こんにちわ
 
+quote:
+  host: "http://api.quotable.io"
+  path: "/quotes/random"
+
 logging:
   level:
     de.sopracss.demo.interceptor.de.sopracss.demo.interceptor.WebLoggingInterceptor: DEBUG
