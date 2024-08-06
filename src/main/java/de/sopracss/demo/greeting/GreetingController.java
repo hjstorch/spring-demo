@@ -31,13 +31,12 @@ public class GreetingController {
     }
 
     @RequestMapping("/greeting/")
-    public String contentno(Model model) {
+    public String noContent(Model model) {
         throw new NullPointerException("No name provided");
     }
 
     @RequestMapping("/greeting/{myname}")
     public String content(@PathVariable(name = "myname") String name, Model model) {
-        name.charAt(0); // forces NullPointerException when name Null
         model.addAttribute("username", name);
         model.addAttribute("greeting", this.greeting);
         model.addAttribute("quote", this.getQuote());
