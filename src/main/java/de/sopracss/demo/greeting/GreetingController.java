@@ -31,7 +31,7 @@ public class GreetingController {
     }
 
     @RequestMapping("/greeting/")
-    public String noContent(Model model) {
+    public String contentno(Model model) {
         throw new NullPointerException("No name provided");
     }
 

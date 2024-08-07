@@ -13,6 +13,9 @@ demo:
   greeting: Hallo
   user.file: "classpath:user/users.json"
 
+springdoc:
+  swagger-ui:
+    enabled: false
 
 logging:
   level:
