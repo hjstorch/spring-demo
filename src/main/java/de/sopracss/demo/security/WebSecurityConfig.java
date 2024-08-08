@@ -1,6 +1,9 @@
 package de.sopracss.demo.security;
 
 import de.sopracss.demo.user.service.UserService;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +35,12 @@ import java.util.*;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@SecuritySchemes(
+    @SecurityScheme(
+            type = SecuritySchemeType.HTTP,
+            name = "basicAuth",
+            scheme = "basic")
+)
 public class WebSecurityConfig {
 
     @Bean
