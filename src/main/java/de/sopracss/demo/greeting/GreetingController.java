@@ -2,6 +2,12 @@ package de.sopracss.demo.greeting;
 
 import de.sopracss.demo.DemoProperties;
 import de.sopracss.demo.quote.QuoteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @ControllerAdvice(assignableTypes = GreetingController.class)
 @Validated
+@Tag(name = "Greeting", description = "Greeting users")
 public class GreetingController {
 
     private final QuoteService quoteService;
@@ -30,8 +37,8 @@ public class GreetingController {
         this.greeting = greeting;
     }
 
-    @RequestMapping("/greeting/")
-    public String contentno(Model model) {
+    @RequestMapping(value = {"/greeting","/greeting/"}, produces = "text/plain")
+    public String contentnotset(Model model) {
         throw new NullPointerException("No name provided");
     }
 
@@ -47,9 +54,17 @@ public class GreetingController {
         return this.quoteService.getQuote();
     }
 
-    @GetMapping("/greetingRest")
+    @GetMapping(value = "/greetingRest", produces = "text/plain")
     @ResponseBody
-    public ResponseEntity<String> errorContent(@RequestParam(name = "myname", required = false) String name,
+    @Operation(summary = "Get a greeting", description = "Get a greeting for a name")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "400", description = "BadRequest", content = @Content(mediaType = "text/plain")),
+    })
+    public ResponseEntity<String> errorContent(@RequestParam(name = "myname", required = false)
+                                                   @Schema(example = "John", requiredMode = Schema.RequiredMode.REQUIRED)
+                                                   String name,
                                                @RequestAttribute(name = "myname", required = false) String goodname,
                                                @RequestAttribute(name = "badname", required = false) boolean badname
     ) {

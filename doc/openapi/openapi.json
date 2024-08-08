@@ -1,0 +1,193 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Demo API",
+    "description": "Demo API for Spring Training",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User",
+      "description": "Managing users"
+    },
+    {
+      "name": "Greeting",
+      "description": "Greeting users"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "List users",
+        "description": "List all users in the system",
+        "operationId": "userList",
+        "responses": {
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "401": {
+            "description": "Not Authenticated",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Add a user",
+        "description": "Add a new user to the system",
+        "operationId": "addUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "200": {
+            "description": "User added"
+          },
+          "409": {
+            "description": "User already exists",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "400": {
+            "description": "Invalid user supplied",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "401": {
+            "description": "Not Authenticated",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/greetingRest": {
+      "get": {
+        "tags": [
+          "Greeting"
+        ],
+        "summary": "Get a greeting",
+        "description": "Get a greeting for a name",
+        "operationId": "errorContent",
+        "parameters": [
+          {
+            "name": "myname",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "required": [
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}

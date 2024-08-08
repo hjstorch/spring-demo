@@ -47,6 +47,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests( authorizeRequestCustomizer ->
                         authorizeRequestCustomizer
                                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                                .requestMatchers("/swagger").permitAll()
+                                .requestMatchers("/swagger/**").permitAll()
+                                .requestMatchers("/swagger-ui").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3").permitAll()
+                                .requestMatchers("/v3/**").permitAll()
                                 .requestMatchers("/greeting").permitAll()
                                 .requestMatchers("/greeting/**").permitAll()
                                 .requestMatchers(matcher.pattern("/greetingRest")).permitAll()
@@ -98,7 +104,7 @@ public class WebSecurityConfig {
         auth.inMemoryAuthentication()
                 .passwordEncoder(defaultDelegatingPasswordEncoder)
                 .withUser("user").password("user").roles(Roles.USER.name()).and()
-                .withUser("admin").password("admin").roles(Roles.ADMIN.name());
+                .withUser("admin").password("admin").roles(Roles.USER.name(), Roles.ADMIN.name());
     }
 
     @Bean
