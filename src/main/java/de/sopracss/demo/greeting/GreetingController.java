@@ -30,8 +30,8 @@ public class GreetingController {
         this.greeting = greeting;
     }
 
-    @RequestMapping("/greeting/")
-    public String noContent(Model model) {
+    @RequestMapping(value = {"/greeting","/greeting/"}, produces = "text/plain")
+    public String contentNotSet() {
         throw new NullPointerException("No name provided");
     }
 
@@ -47,7 +47,7 @@ public class GreetingController {
         return this.quoteService.getQuote();
     }
 
-    @GetMapping("/greetingRest")
+    @GetMapping(value = "/greetingRest", produces = "text/plain")
     @ResponseBody
     public ResponseEntity<String> errorContent(@RequestParam(name = "myname", required = false) String name,
                                                @RequestAttribute(name = "myname", required = false) String goodname,
@@ -62,11 +62,8 @@ public class GreetingController {
         return ResponseEntity.ok().body(demoProperties.getGreeting() + " " + name);
     }
 
-
-
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> handleException(Exception e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
-
 }
