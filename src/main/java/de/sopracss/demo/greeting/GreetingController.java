@@ -64,11 +64,11 @@ public class GreetingController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(mediaType = "text/plain")),
             @ApiResponse(responseCode = "400", description = "BadRequest", content = @Content(mediaType = "text/plain")),
     })
-    public ResponseEntity<String> errorContent(@RequestParam(name = "myname", required = false)
+    public ResponseEntity<String> restContent(@RequestParam(name = "myname", required = false)
                                                    @Schema(example = "John", requiredMode = Schema.RequiredMode.REQUIRED)
                                                    String name,
-                                               @RequestAttribute(name = "myname", required = false) String goodname,
-                                               @RequestAttribute(name = "badname", required = false) boolean badname
+                                              @RequestAttribute(name = "myname", required = false) String goodname,
+                                              @RequestAttribute(name = "badname", required = false) boolean badname
     ) {
         if(null == name){
             return ResponseEntity.notFound().build();

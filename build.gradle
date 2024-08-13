@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.2'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
+    id 'org.openapi.generator' version '7.7.0'
     id 'io.swagger.core.v3.swagger-gradle-plugin' version '2.2.22'
 }
 
@@ -28,6 +29,28 @@ repositories {
 openApi {
     outputDir.set(file("${project.projectDir}/doc/openapi"))
     apiDocsUrl.set("http://localhost:8080/v3/api-docs")
+}
+
+openApiValidate {
+    inputSpec.set("$project.projectDir/doc/openapi/openapi.json")
+}
+
+openApiGenerate {
+    generatorName.set("java")
+    inputSpec.set("${project.projectDir}/doc/openapi/openapi.json")
+    outputDir.set("${project.projectDir}/javaclient/src/main/java")
+    apiPackage.set("de.soprasteria.css.demo.client.api")
+    modelPackage.set("de.soprasteria.css.demo.client.model")
+    configOptions.put("library", "apache-httpclient")
+}
+
+resolve {
+    outputFileName = 'DemoAPI'
+    outputFormat = 'JSON'
+    prettyPrint = 'TRUE'
+    classpath = sourceSets.main.runtimeClasspath
+    resourcePackages = ['de.sopracss.demo']
+    outputDir = file("$project.projectDir/doc/swagger/") as File
 }
 
 dependencies {

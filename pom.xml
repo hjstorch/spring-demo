@@ -100,4 +100,97 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>generate_clients</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<environmentVariables>
+								<SPRING_APPLICATION_ADMIN_ENABLED>true</SPRING_APPLICATION_ADMIN_ENABLED>
+								<SERVER_PORT>8080</SERVER_PORT>
+							</environmentVariables>
+							<excludes>
+								<exclude>
+									<groupId>org.projectlombok</groupId>
+									<artifactId>lombok</artifactId>
+								</exclude>
+							</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<!-- start and stop the application after tests-->
+								<!-- needed to extract the api description and convert to json-->
+								<id>pre-integration-test</id>
+								<goals>
+									<goal>start</goal>
+								</goals>
+								<configuration>
+									<wait>2000</wait>
+									<maxAttempts>30</maxAttempts>
+								</configuration>
+							</execution>
+							<execution>
+								<id>post-integration-test</id>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.springdoc</groupId>
+						<artifactId>springdoc-openapi-maven-plugin</artifactId>
+						<version>1.4</version>
+						<executions>
+							<execution>
+								<!-- download api description YAML from swagger api endpoint-->
+								<!-- yaml api description is base for code generators below-->
+								<id>integration-test</id>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<apiDocsUrl>http://localhost:8080/v3/api-docs.yaml</apiDocsUrl>
+									<outputFileName>demo-openapi.yaml</outputFileName>
+									<outputDir>${project.basedir}/doc/openapi/</outputDir>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.openapitools</groupId>
+						<artifactId>openapi-generator-maven-plugin</artifactId>
+						<version>5.3.0</version>
+						<executions>
+							<execution>
+								<id>generate-client-java</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<inputSpec>${project.basedir}/doc/openapi/demo-openapi.yaml</inputSpec>
+									<generatorName>java</generatorName>
+									<!-- https://openapi-generator.tech/docs/generators/java/-->
+									<configOptions>
+										<library>apache-httpclient</library>
+										<apiPackage>de.soprasteria.css.demo.client.api</apiPackage>
+										<modelPackage>de.soprasteria.css.demo.client.model</modelPackage>
+									</configOptions>
+									<output>${project.basedir}/target/generated-client/java-client/</output>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
