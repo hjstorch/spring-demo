@@ -6,8 +6,8 @@ application:
       base: INFO
 
 spring:
-    application:
-      name: demo
+  application:
+    name: demo
 
 demo:
   greeting: Hallo

@@ -21,6 +21,10 @@ management:
       enabled: true
     health:
       enabled: true
+      probes:
+        enabled: true
+        add-additional-paths: true
+      show-details: always
     prometheus:
       enabled: true
     shutdown:
