@@ -4,6 +4,28 @@ quote:
   host: "http://api.quotable.io"
   path: "/quotes/random"
 
+management:
+  server:
+    port: 8088
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: info,health,metrics,prometheus
+    jmx:
+      exposure:
+        exclude: "*"
+
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
+    shutdown:
+      enabled: true
+
 logging:
   level:
     de.sopracss.demo.interceptor.de.sopracss.demo.interceptor.WebLoggingInterceptor: DEBUG

@@ -51,6 +51,8 @@ public class WebSecurityConfig {
                                 .requestMatchers("/greeting/**").permitAll()
                                 .requestMatchers(matcher.pattern("/greetingRest")).permitAll()
                                 .requestMatchers(matcher.pattern("/user")).hasRole(Roles.USER.name())
+                                .requestMatchers("/actuator").permitAll()
+                                .requestMatchers("/actuator/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
