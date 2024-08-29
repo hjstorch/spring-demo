@@ -1,8 +1,11 @@
 package de.sopracss.demo.user.service;
 
+import de.sopracss.demo.monitoring.MetricsService;
 import de.sopracss.demo.user.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tags;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Scope("singleton")
 @Qualifier("contextQualifier")
@@ -22,12 +26,22 @@ public class UserService {
 
     private Map<String, User> users = new HashMap<>();
 
+    private final AtomicInteger userTotalCount = new AtomicInteger();
+
     private final Resource userfile;
     private final ObjectMapper mapper;
+    private final MeterRegistry meterRegistry;
+    private final MetricsService metricsService;
 
-    public UserService(@Value("${demo.user.file}")Resource userfile, ObjectMapper mapper) {
+    public UserService(@Value("${demo.user.file}")Resource userfile, ObjectMapper mapper,
+                       MeterRegistry meterRegistry, MetricsService metricsService
+    ) {
         this.userfile = userfile;
         this.mapper = mapper;
+        this.meterRegistry = meterRegistry;
+        this.metricsService = metricsService;
+
+        this.meterRegistry.gauge("users", Tags.of("type","size"), userTotalCount);
     }
 
     @PostConstruct // alternative activate UserLoader
@@ -42,6 +56,8 @@ public class UserService {
                 (map, user) -> map.put(user.getUsername(), user),
                 HashMap::putAll
         );
+        meterRegistry.gaugeMapSize("users", Tags.of("type", "autocount"), this.users);
+        userTotalCount.set(this.users.size());
     }
 
     private void saveUsers() throws IOException {
@@ -60,6 +76,9 @@ public class UserService {
         users.put(user.getUsername(),user);
         try {
             this.saveUsers();
+            metricsService.incrementGauge(MetricsService.USERS_ADDED_TODAY_COUNTER_NAME,
+                    MetricsService.USERS_ADDED_TODAY_COUNTER_TAGS);
+            userTotalCount.set(this.users.size());
         } catch (IOException e) {
             throw new IllegalArgumentException("Could not save user", e);
         }

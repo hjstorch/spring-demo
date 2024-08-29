@@ -1,7 +1,9 @@
 package de.sopracss.demo.user.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.sopracss.demo.monitoring.MetricsService;
 import de.sopracss.demo.user.model.User;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
@@ -23,6 +25,10 @@ class UserServiceTest {
 
     private final Resource mockResource = mock(Resource.class);
 
+    private final MeterRegistry mockRegistry = mock(MeterRegistry.class);
+
+    private final MetricsService mockMetrics = mock(MetricsService.class);
+
     private UserService sut;
 
     @BeforeEach
@@ -30,7 +36,10 @@ class UserServiceTest {
         when(mockResource.getFilename()).thenReturn("users.json");
         when(mockResource.getFile()).thenReturn(new File("build/resources/test/users.json"));
         when(mockResource.getContentAsByteArray()).thenReturn(userJsonExisting.getBytes());
-        sut = new UserService(mockResource, mockMapper);
+        when(mockRegistry.gauge(anyString(), anyIterable(), anyInt())).thenReturn(10);
+        when(mockRegistry.gaugeCollectionSize(anyString(), anyIterable(), anyCollection())).thenReturn(List.of());
+        doNothing().when(mockMetrics).incrementGauge(anyString(), anyIterable());
+        sut = new UserService(mockResource, mockMapper, mockRegistry, mockMetrics);
         sut.loadUsers(); // is done by SpringBoot in real application
     }
 

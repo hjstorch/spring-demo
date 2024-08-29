@@ -19,7 +19,7 @@ public class MonitoringConfig {
     @Value("${application.version}")
     String appVersion;
 
-    @Bean
+    @Bean // actuator/info
     public InfoContributor infoContributor() {
         // using lambda representing the only interface function instead of creating anonymous inner class
         return builder -> builder
@@ -28,7 +28,7 @@ public class MonitoringConfig {
                 .withDetails(Map.of("key of info", "info value to display" ));
     }
 
-    @Bean("quote")
+    @Bean("quote") // actuator/health/quote
     public HealthIndicator quoteHealthIndicator(QuoteService quoteService) {
         return () -> "No quote available".equals(quoteService.getQuote()) ?
                 Health.outOfService().withDetail("QuoteService", "unreachable").build() :
