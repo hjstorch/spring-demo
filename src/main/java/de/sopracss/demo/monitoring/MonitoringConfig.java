@@ -31,7 +31,7 @@ public class MonitoringConfig {
     @Bean("quote") // -> actuator/health/quote
     public HealthIndicator quoteHealthIndicator(QuoteService quoteService) {
         return () -> "No quote available".equals(quoteService.getQuote()) ?
-                Health.outOfService().withDetail("QuoteService", "unreachable").build() :
-                Health.up().withDetail("QuoteService", "available").build();
+                Health.outOfService().withDetail("QuoteAPI", "unreachable").build() :
+                Health.up().withDetail("QuoteAPI", "available").build();
     }
 }

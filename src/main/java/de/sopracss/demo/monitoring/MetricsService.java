@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -51,17 +50,17 @@ public class MetricsService implements ApplicationRunner {
         // ...
     }
 
-    // not optimal because we are creating a Meter with weak references from micrometer gauge
-    public void incrementGauge(String name, Iterable<Tag> tags) {
-        Objects.requireNonNull(this.meterRegistry.gauge(name, tags, new AtomicInteger(0))).incrementAndGet();
-    }
-
-    public void decrementGauge(String name, Iterable<Tag> tags) {
-        Objects.requireNonNull(this.meterRegistry.gauge(name, tags, new AtomicInteger(0))).decrementAndGet();
-    }
+    // not good because we are creating a Meter with weak references in micrometer gauge
+//    public void incrementGauge(String name, Iterable<Tag> tags) {
+//        Objects.requireNonNull(this.meterRegistry.gauge(name, tags, new AtomicInteger(0))).incrementAndGet();
+//    }
+//
+//    public void decrementGauge(String name, Iterable<Tag> tags) {
+//        Objects.requireNonNull(this.meterRegistry.gauge(name, tags, new AtomicInteger(0))).decrementAndGet();
+//    }
 
     // better: use strong reference maintained in this service
-    public void incrementUserAddedTodayCounter() {
+    public synchronized void incrementUserAddedTodayCounter() {
         userAddedTodayCounterValue.incrementAndGet();
     }
 }
