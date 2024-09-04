@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import({WebSecurityConfig.class, WebExceptionHandler.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("unittest")
-public class UserControllerTest {
+class UserControllerTest {
 
     private final String userJson = """
             {"username":"zwylde","firstname":"Zak","lastname":"Wylde","email":"zak@bls.com"}
@@ -69,42 +69,42 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser()
-    public void testUserList() throws Exception {
+    void testUserList() throws Exception {
         client.perform(get("/user"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = {"USER", "ADMIN"}) // needs both roles to satisfy the @PreAuthorize("hasRole('ADMIN')") and Matcher in WebSecurityConfig
-    public void testUserAdd() throws Exception {
+    void testUserAdd() throws Exception {
         client.perform(put("/user").contentType(MediaType.APPLICATION_JSON).content(userJson))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = {"USER", "ADMIN"})
-    public void testInvalidUserAdd() throws Exception {
+    void testInvalidUserAdd() throws Exception {
         client.perform(put("/user").contentType(MediaType.APPLICATION_JSON).content(userJsonInvalid))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser(roles = {"USER", "ADMIN"})
-    public void testNoUsernameUserAdd() throws Exception {
+    void testNoUsernameUserAdd() throws Exception {
         client.perform(put("/user").contentType(MediaType.APPLICATION_JSON).content(userJsonInvalid2))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser(roles = {"USER", "ADMIN"})
-    public void testExistingUserAdd() throws Exception {
+    void testExistingUserAdd() throws Exception {
         client.perform(put("/user").contentType(MediaType.APPLICATION_JSON).content(userJsonExisting))
                 .andExpect(status().isConflict());
     }
 
     @Test
     @WithMockUser()
-    public void testUserAddNoRole() throws Exception {
+    void testUserAddNoRole() throws Exception {
         client.perform(put("/user").contentType(MediaType.APPLICATION_JSON).content(userJson))
                 .andExpect(status().isForbidden());
     }

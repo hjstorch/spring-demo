@@ -7,10 +7,10 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
-public class ExpressionLanguageTest {
+class ExpressionLanguageTest {
 
     @Test
-    public void testValue() {
+    void testValue() {
 
         ExpressionParser parser = new SpelExpressionParser();
         EvaluationContext context = new StandardEvaluationContext(new User());
