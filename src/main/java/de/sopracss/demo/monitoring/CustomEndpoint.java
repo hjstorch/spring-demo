@@ -7,7 +7,7 @@ import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
 import org.springframework.stereotype.Component;
 
 @Component
-@Endpoint(id = "greet", enableByDefault = false)
+@Endpoint(id = "greet", enableByDefault = false) // -> actuator/greet/...
 public class CustomEndpoint {
 
     @ReadOperation //HTTP GET
