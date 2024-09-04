@@ -4,6 +4,7 @@ import de.sopracss.demo.monitoring.MetricsService;
 import de.sopracss.demo.user.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
 import jakarta.annotation.PostConstruct;
@@ -41,7 +42,9 @@ public class UserService {
         this.meterRegistry = meterRegistry;
         this.metricsService = metricsService;
 
-        this.meterRegistry.gauge("users", Tags.of("type","size"), userTotalCount);
+        Gauge.builder("users", userTotalCount, AtomicInteger::get)
+                .tags(Tags.of("type","size"))
+                .register(this.meterRegistry);
     }
 
     @PostConstruct // alternative activate UserLoader
@@ -76,8 +79,7 @@ public class UserService {
         users.put(user.getUsername(),user);
         try {
             this.saveUsers();
-            metricsService.incrementGauge(MetricsService.USERS_ADDED_TODAY_COUNTER_NAME,
-                    MetricsService.USERS_ADDED_TODAY_COUNTER_TAGS);
+            metricsService.incrementUserAddedTodayCounter();
             userTotalCount.set(this.users.size());
         } catch (IOException e) {
             throw new IllegalArgumentException("Could not save user", e);

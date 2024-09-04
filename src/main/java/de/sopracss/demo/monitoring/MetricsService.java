@@ -1,5 +1,6 @@
 package de.sopracss.demo.monitoring;
 
+import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import org.springframework.boot.ApplicationArguments;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
@@ -19,6 +21,8 @@ public class MetricsService implements ApplicationRunner {
 
     private final MeterRegistry meterRegistry;
 
+    private final AtomicInteger userAddedTodayCounterValue = new AtomicInteger(0); // hold strong reference here
+
     public MetricsService(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
     }
@@ -27,32 +31,37 @@ public class MetricsService implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         // register and initialize custom Metrics
         // use a gauge because we want to reset them daily
-        this.meterRegistry.gauge(
-                USERS_ADDED_TODAY_COUNTER_NAME,
-                USERS_ADDED_TODAY_COUNTER_TAGS,
-                new AtomicInteger(0))
-                .set(0);
+        Gauge.builder(USERS_ADDED_TODAY_COUNTER_NAME, userAddedTodayCounterValue, AtomicInteger::get)
+                .tags(USERS_ADDED_TODAY_COUNTER_TAGS)
+                .register(meterRegistry);
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
-    public void resetDailyMetrics() {
-        this.meterRegistry
-                // this may seem strange: if gauge exists the value is not changed
-                .gauge(USERS_ADDED_TODAY_COUNTER_NAME, new AtomicInteger(0))
-                // we need to call the set() explicit
-                .set(0);
+    @Scheduled(cron = "0 30 1 * * *")
+    public void resetMetricsDailyAt1H30() {
+        userAddedTodayCounterValue.set(0);
     }
 
-    @Scheduled(cron = "0 0 * * * *")
-    public void resetHourlyMetrics() {
+    @Scheduled(cron = "0 0 * * * *") // equal to "0 0 */1 * * *"
+    public void resetMetricsHourly() {
         // ...
     }
 
+    @Scheduled(timeUnit = TimeUnit.MINUTES, fixedRate = 10)
+    public void resetMetricsEvery10Min() {
+        // ...
+    }
+
+    // not optimal because we are creating a Meter with weak references from micrometer gauge
     public void incrementGauge(String name, Iterable<Tag> tags) {
         Objects.requireNonNull(this.meterRegistry.gauge(name, tags, new AtomicInteger(0))).incrementAndGet();
     }
 
     public void decrementGauge(String name, Iterable<Tag> tags) {
         Objects.requireNonNull(this.meterRegistry.gauge(name, tags, new AtomicInteger(0))).decrementAndGet();
+    }
+
+    // better: use strong reference maintained in this service
+    public void incrementUserAddedTodayCounter() {
+        userAddedTodayCounterValue.incrementAndGet();
     }
 }

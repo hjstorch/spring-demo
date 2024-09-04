@@ -5,6 +5,9 @@ quote:
   path: "/quotes/random"
 
 management:
+  info:
+    env:
+      enabled: true
   server:
     port: 8088
   endpoints:
@@ -15,7 +18,6 @@ management:
     jmx:
       exposure:
         exclude: "*"
-
   endpoint:
     info:
       enabled: true

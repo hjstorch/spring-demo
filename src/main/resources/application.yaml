@@ -13,6 +13,8 @@ demo:
   greeting: Hallo
   user.file: "classpath:user/users.json"
 
+info.name: MyDemoApp
+
 logging:
   level:
     root: ${application.log.level.base} # Env var "APPLICATION_LOG_LEVEL_BASE=INFO"

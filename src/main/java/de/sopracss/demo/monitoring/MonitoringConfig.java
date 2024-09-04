@@ -28,7 +28,7 @@ public class MonitoringConfig {
                 .withDetails(Map.of("key of info", "info value to display" ));
     }
 
-    @Bean("quote") // actuator/health/quote
+    @Bean("quote") // -> actuator/health/quote
     public HealthIndicator quoteHealthIndicator(QuoteService quoteService) {
         return () -> "No quote available".equals(quoteService.getQuote()) ?
                 Health.outOfService().withDetail("QuoteService", "unreachable").build() :
