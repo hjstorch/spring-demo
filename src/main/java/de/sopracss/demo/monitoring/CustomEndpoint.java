@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 @Endpoint(id = "greet", enableByDefault = false)
 public class CustomEndpoint {
 
-
-
     @ReadOperation //HTTP GET
     public String customRead() {
         return "Hello User";
