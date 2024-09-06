@@ -1,6 +1,8 @@
 package de.sopracss.demo.monitoring;
 
 import de.sopracss.demo.quote.QuoteService;
+import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -33,5 +35,10 @@ public class MonitoringConfig {
         return () -> "No quote available".equals(quoteService.getQuote()) ?
                 Health.outOfService().withDetail("QuoteAPI", "unreachable").build() :
                 Health.up().withDetail("QuoteAPI", "available").build();
+    }
+
+    @Bean
+    public TimedAspect timedAspect(MeterRegistry registry) {
+        return new TimedAspect(registry);
     }
 }

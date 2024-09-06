@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -61,6 +62,7 @@ public class MetricsService implements ApplicationRunner {
 
     // better: use strong reference maintained in this service
     public synchronized void incrementUserAddedTodayCounter() {
-        userAddedTodayCounterValue.incrementAndGet();
+        int actualValue = userAddedTodayCounterValue.incrementAndGet();
+        // ToDo: persist actualValue
     }
 }

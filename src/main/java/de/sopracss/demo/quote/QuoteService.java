@@ -1,5 +1,8 @@
 package de.sopracss.demo.quote;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.Timer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,8 @@ public class QuoteService {
     private final String quoteApi;
     private final String quotePath;
 
+    private MeterRegistry registry = Metrics.globalRegistry;
+
     @Autowired
     public QuoteService(
             RestTemplate restTemplate,
@@ -22,6 +27,10 @@ public class QuoteService {
         this.restTemplate = restTemplate;
         this.quoteApi = quoteApi;
         this.quotePath = quotePath;
+
+        Timer quoteTimer = Timer.builder("quote.service")
+                .register(registry);
+        quoteTimer.record(this::getQuote);
     }
 
     public String getQuote() {
