@@ -34,11 +34,13 @@ public class MetricsService implements ApplicationRunner {
         Gauge.builder(USERS_ADDED_TODAY_COUNTER_NAME, userAddedTodayCounterValue, AtomicInteger::get)
                 .tags(USERS_ADDED_TODAY_COUNTER_TAGS)
                 .register(meterRegistry);
+        // ToDo: adjust userAddedTodayCounterValue start value if persisted
     }
 
     @Scheduled(cron = "0 30 1 * * *")
     public void resetMetricsDailyAt1H30() {
         userAddedTodayCounterValue.set(0);
+        // ToDo: persist current value if needed
     }
 
     @Scheduled(cron = "0 0 * * * *") // equal to "0 0 */1 * * *"
@@ -63,6 +65,6 @@ public class MetricsService implements ApplicationRunner {
     // better: use strong reference maintained in this service
     public synchronized void incrementUserAddedTodayCounter() {
         int actualValue = userAddedTodayCounterValue.incrementAndGet();
-        // ToDo: persist actualValue
+        // ToDo: persist actualValue if needed
     }
 }
