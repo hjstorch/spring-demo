@@ -1,1 +1,6 @@
 demo.greeting: Hola
+spring:
+  jpa:
+    database: h2
+  datasource:
+    url: jdbc:h2:mem:test
