@@ -13,7 +13,7 @@ public class TaxEntity {
     @Id
     String locale;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COUNTRY_ID")
     CountryEntity country;
 

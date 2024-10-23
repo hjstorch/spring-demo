@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --requirepass redistest
+    volumes:
+      - cache:/data
+    restart: always
+volumes:
+  cache:
+    driver: local

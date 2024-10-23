@@ -2,6 +2,7 @@ package de.sopracss.demo.product;
 
 import de.sopracss.demo.product.model.Product;
 import de.sopracss.demo.product.service.ProductService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @GetMapping("/product")
     public List<Product> listProducts() {
         return productService.listProducts();
     }
