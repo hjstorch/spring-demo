@@ -9,7 +9,6 @@ public class MyBeanClass {
 
     public MyBeanClass(String parameter) {
         this.parameter = parameter;
-
     }
     private void initMethod() {
         log.debug("Initialized with parameter: {}", parameter);
