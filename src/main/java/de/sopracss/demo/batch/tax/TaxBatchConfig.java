@@ -9,8 +9,8 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -46,10 +46,11 @@ public class TaxBatchConfig {
 
     @Bean
     public ItemReader<TaxEntity> taxReader() {
-        return new JpaCursorItemReaderBuilder<TaxEntity>()
+        return new JpaPagingItemReaderBuilder<TaxEntity>()
                 .name("taxreader")
                 .entityManagerFactory(this.entityManagerFactory)
-                .queryString("SELECT t FROM TAX t")
+                .queryString("SELECT t FROM TaxEntity t")
+                .pageSize(100)
                 .build();
     }
 

@@ -8,6 +8,11 @@ application:
 spring:
     application:
       name: demo
+    batch:
+      jdbc:
+        initialize-schema: always
+      job:
+        enabled: false
 
 demo:
   greeting: Hallo
