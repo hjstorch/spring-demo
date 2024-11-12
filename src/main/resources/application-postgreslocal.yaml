@@ -1,9 +1,14 @@
 spring:
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:persistence/data.sql
   datasource:
     url: "jdbc:postgresql://localhost:5432/demo"
     username: "test"
     password: "test"
     driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: create
     database: POSTGRESQL
+    defer-datasource-initialization: true

@@ -9,6 +9,7 @@ import lombok.Data;
 @Entity
 @Table(name = "COUNTRY")
 public class CountryEntity {
+
     @Id
     private String id;
 
