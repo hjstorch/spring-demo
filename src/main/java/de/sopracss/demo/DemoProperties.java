@@ -10,4 +10,12 @@ import org.springframework.stereotype.Component;
 public class DemoProperties {
 
     private String greeting;
+
+    private UserProperties user = new UserProperties();
+
+    @Data
+    private class UserProperties {
+
+        private String file;
+    }
 }
