@@ -9,6 +9,6 @@ spring:
     password: "test"
     driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: create-drop
     database: POSTGRESQL
     defer-datasource-initialization: true

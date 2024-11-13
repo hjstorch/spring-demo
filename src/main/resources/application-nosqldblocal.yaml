@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    type: com.mongodb.client.MongoClient
+    url: mongodb://mongo:27017/
+    username: test
+    password: test
+
+  mongo:
+    database: demo

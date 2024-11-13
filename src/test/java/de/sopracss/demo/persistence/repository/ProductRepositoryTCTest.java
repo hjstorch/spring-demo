@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql(scripts = {"classpath:testsql/insert_postgres.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = {"classpath:testsql/cleanup_postgres.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("unittest")
 @Testcontainers
 class ProductRepositoryTCTest {
 

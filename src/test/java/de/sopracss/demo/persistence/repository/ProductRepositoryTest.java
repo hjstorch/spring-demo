@@ -16,10 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest(
     properties = {
             "spring.datasource.url=jdbc:h2:mem:test",
-            "spring.jpa.hibernate.ddl-auto=create-drop"
+            "spring.jpa.hibernate.ddl-auto=create-drop",
+            "demo.cache.redis.cache.enabled=true",
+            "spring.cache.redis.time-to-live-minutes=60"
     }
 )
-@Sql(scripts = {"classpath:testsql/insert.sql"} )
+@Sql(scripts = {"classpath:testsql/insert.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("unittest")
 class ProductRepositoryTest {
