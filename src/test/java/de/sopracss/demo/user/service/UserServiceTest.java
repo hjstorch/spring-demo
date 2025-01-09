@@ -39,7 +39,6 @@ class UserServiceTest {
         when(mockResource.getContentAsByteArray()).thenReturn(userJsonExisting.getBytes());
         when(mockRegistry.gauge(anyString(), anyIterable(), anyInt())).thenReturn(10);
         when(mockRegistry.gaugeCollectionSize(anyString(), anyIterable(), anyCollection())).thenReturn(List.of());
-        doNothing().when(mockMetrics).incrementGauge(anyString(), anyIterable());
         doNothing().when(mockMetrics).incrementUserAddedTodayCounter();
         sut = new UserService(mockResource, mockMapper, mockRegistry, mockMetrics);
         sut.loadUsers(); // is done by SpringBoot in real application
