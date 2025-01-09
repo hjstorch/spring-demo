@@ -39,7 +39,7 @@ public class GreetingController {
     }
 
     @RequestMapping(value = {"/greeting","/greeting/"}, produces = "text/plain")
-    public String contentnotset(Model model) {
+    public String contentNotSet(Model model) {
         throw new NullPointerException("No name provided");
     }
 
@@ -79,11 +79,8 @@ public class GreetingController {
         return ResponseEntity.ok().body(demoProperties.getGreeting() + " " + name);
     }
 
-
-
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> handleException(Exception e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
-
 }

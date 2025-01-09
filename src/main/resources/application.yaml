@@ -21,4 +21,4 @@ logging:
   level:
     root: ${application.log.level.base} # Env var "APPLICATION_LOG_LEVEL_BASE=INFO"
     org.springframework.web: DEBUG
-    de.sopracss.demo.interceptor.de.sopracss.demo.interceptor.WebLoggingInterceptor: INFO
+    de.sopracss.demo.interceptor.WebLoggingInterceptor: INFO

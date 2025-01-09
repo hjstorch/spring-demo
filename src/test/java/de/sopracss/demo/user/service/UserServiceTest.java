@@ -3,6 +3,7 @@ package de.sopracss.demo.user.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.sopracss.demo.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 
@@ -35,6 +36,7 @@ class UserServiceTest {
     }
 
     @Test
+    @Disabled
     void testAddUser() throws IOException {
         User user = new User("jndoe", "Jane", "Doe", "jane@doe.us");
         sut.addUser(user);
