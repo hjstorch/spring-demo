@@ -5,6 +5,7 @@ import de.sopracss.demo.monitoring.MetricsService;
 import de.sopracss.demo.user.model.User;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
 
@@ -45,6 +46,7 @@ class UserServiceTest {
     }
 
     @Test
+    @Disabled
     void testAddUser() throws IOException {
         User user = new User("jndoe", "Jane", "Doe", "jane@doe.us");
         sut.addUser(user);

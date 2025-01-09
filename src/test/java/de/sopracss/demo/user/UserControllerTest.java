@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -50,13 +51,13 @@ class UserControllerTest {
     @Autowired
     MockMvc client;
 
-    @MockBean
+    @MockitoBean
     UserService userService;
 
     // this should not be necessary as it is not used in the UserController‚
     // there is maybe a bug in spring test also loading the GreetingController
     // even this test is restricted to UserController.class
-    @MockBean
+    @MockitoBean
     QuoteService quoteService;
 
     @BeforeEach
