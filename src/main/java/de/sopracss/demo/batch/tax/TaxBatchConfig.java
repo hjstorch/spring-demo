@@ -4,6 +4,7 @@ import de.sopracss.demo.persistence.entity.TaxEntity;
 import jakarta.persistence.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -13,9 +14,11 @@ import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
+@EnableBatchProcessing
 public class TaxBatchConfig {
 
 
@@ -34,12 +37,13 @@ public class TaxBatchConfig {
     }
 
     @Bean
-    public Step taxStep(TaxProcessor taxProcessor, JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+    public Step taxStep(TaxProcessor taxProcessor, JobRepository jobRepository, PlatformTransactionManager transactionManager, SimpleAsyncTaskExecutor taskExecutor) {
         return new StepBuilder("tax", jobRepository)
                 .<TaxEntity, TaxEntity>chunk(1, transactionManager)
                 .reader(taxReader())
                 .processor(taxProcessor)
                 .writer(taxWriter())
+                .taskExecutor(taskExecutor)
                 .build()
         ;
     }
