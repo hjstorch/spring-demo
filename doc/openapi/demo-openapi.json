@@ -1,0 +1,204 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Demo API",
+    "description": "Demo API for Spring Training",
+    "version": "1.0",
+    "summary": "Demo API"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User",
+      "description": "Managing users"
+    },
+    {
+      "name": "Greeting",
+      "description": "Greeting users"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "List users",
+        "description": "List all users in the system",
+        "operationId": "userList",
+        "responses": {
+          "401": {
+            "description": "No Authenticated",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "404": {
+            "description": "No found",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Add a user",
+        "description": "Add a new user to the system",
+        "operationId": "addUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Invalid user supplied",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "401": {
+            "description": "Not Authenticated",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "200": {
+            "description": "User added"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "409": {
+            "description": "User already exists",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      }
+    },
+    "/greetingRest": {
+      "get": {
+        "tags": [
+          "Greeting"
+        ],
+        "summary": "Get a greeting",
+        "description": "Get a greeting for a name",
+        "operationId": "restContent",
+        "parameters": [
+          {
+            "name": "myname",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "John"
+            },
+            "example": "John"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "jdoe"
+          },
+          "firstname": {
+            "type": "string",
+            "example": "John"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@doe.ex"
+          }
+        },
+        "required": [
+          "username"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}

@@ -23,6 +23,6 @@ public class ProductEntity {
     private String description;
     private BigDecimal price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Transient
     private TaxEntity vatRate;
 }
