@@ -1,5 +1,7 @@
 package de.sopracss.demo.product.service;
 
+import de.sopracss.demo.persistence.entity.TaxEntity;
+import de.sopracss.demo.persistence.repository.TaxRepository;
 import de.sopracss.demo.product.model.Product;
 import de.sopracss.demo.persistence.entity.ProductEntity;
 import de.sopracss.demo.persistence.repository.ProductRepository;
@@ -20,15 +22,21 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    private final TaxRepository taxRepository;
+
+    public ProductService(ProductRepository productRepository, TaxRepository taxRepository) {
         this.productRepository = productRepository;
+        this.taxRepository = taxRepository;
     }
 
     @Cacheable(cacheNames = "product", key="'AllProducts'")// use "AllProducts" as key instead SimpleKey.EMPTY
     public List<Product> listProducts() {
+        TaxEntity tax = taxRepository.findTaxEntityByCountry_Name("Germany").orElse(new TaxEntity());
         log.info("reading products from repository!");
         List<ProductEntity> allProducts = productRepository.findAll();
-        return allProducts.stream().map(this::mapProduct).toList();
+        return allProducts.stream()
+                .peek(productEntity -> productEntity.setVatRate(tax))
+                .map(this::mapProduct).toList();
     }
 
     private Product mapProduct(ProductEntity product) {
