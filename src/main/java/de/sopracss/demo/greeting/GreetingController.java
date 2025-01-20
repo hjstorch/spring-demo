@@ -9,60 +9,45 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @ControllerAdvice(assignableTypes = GreetingController.class)
 @Validated
 public class GreetingController {
 
     private final QuoteService quoteService;
 
+    private final GreetingService greetingService;
+
     private final DemoProperties demoProperties;
 
-    private final String greeting;
-
     public GreetingController(
-            QuoteService quoteService,
-            DemoProperties demoProperties,
-            @Value("${demo.greeting}") String greeting
+            QuoteService quoteService, GreetingService greetingService,
+            DemoProperties demoProperties
     ) {
         this.quoteService = quoteService;
+        this.greetingService = greetingService;
         this.demoProperties = demoProperties;
-        this.greeting = greeting;
     }
 
-    @RequestMapping(value = {"/greeting","/greeting/"}, produces = "text/plain")
-    public String contentNotSet() {
-        throw new NullPointerException("No name provided");
+    @GetMapping(value = {"/greeting",}, produces = "text/plain")
+    public String greetingParam(@RequestParam(value = "myname", defaultValue = "Welt") String name) {
+        return getGreetingAndQuote(name);
     }
 
-    @RequestMapping("/greeting/{myname}")
-    public String content(@PathVariable(name = "myname") String name, Model model) {
-        model.addAttribute("username", name);
-        model.addAttribute("greeting", this.greeting);
-        model.addAttribute("quote", this.getQuote());
-        return "greeting";
+    @GetMapping({"/greeting/{myname}","/greeting/"})
+    public String greetingPath(@PathVariable(name = "myname", required = false) String name) {
+        return getGreetingAndQuote(name);
+    }
+
+    private String getGreetingAndQuote(String name) {
+        return this.greetingService.getGreeting(name) + " Quote of the Day: " + this.getQuote();
     }
 
     private String getQuote() {
         return this.quoteService.getQuote();
     }
 
-    @GetMapping(value = "/greetingRest", produces = "text/plain")
-    @ResponseBody
-    public ResponseEntity<String> errorContent(@RequestParam(name = "myname", required = false) String name,
-                                               @RequestAttribute(name = "myname", required = false) String goodname,
-                                               @RequestAttribute(name = "badname", required = false) boolean badname
-    ) {
-        if(null == name){
-            return ResponseEntity.notFound().build();
-        }
-        if(badname) {
-            name = goodname;
-        }
-        return ResponseEntity.ok().body(demoProperties.getGreeting() + " " + name);
-    }
-
-    @ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleException(Exception e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
