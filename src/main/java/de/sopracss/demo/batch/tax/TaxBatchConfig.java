@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
@@ -23,9 +24,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class TaxBatchConfig {
 
     private final EntityManagerFactory entityManagerFactory;
+    private final JobRepository jobRepository;
+    private final DataSourceTransactionManager transactionManager;
 
-    public TaxBatchConfig(EntityManagerFactory entityManagerFactory) {
+    public TaxBatchConfig(EntityManagerFactory entityManagerFactory, JobRepository jobRepository, DataSourceTransactionManager transactionManager) {
         this.entityManagerFactory = entityManagerFactory;
+        this.jobRepository = jobRepository;
+        this.transactionManager = transactionManager;
     }
 
     @Bean
@@ -69,4 +74,24 @@ public class TaxBatchConfig {
                 .entityManagerFactory(this.entityManagerFactory)
                 .build();
     }
+
+//    @Bean
+//    public Job sampleJob(JobRepository jobRepository) {
+//        Step step1 = createStep("1");
+//        Step step2 = createStep("2");
+//        Step step3 = createStep("3");
+//        Step step4 = createStep("4");
+//        return new JobBuilder("sampleJob", jobRepository)
+//                .start(step1)
+//                .on("*").to(step2)
+//                .from(step1).on("FAILED").to(step3)
+//                .next(step4)
+//                .end()
+//                .build();
+//    }
+//
+//    private Step createStep(String name) {
+//        return new StepBuilder("step"+name, jobRepository)
+//                .chunk(1, transactionManager).build();
+//    }
 }
