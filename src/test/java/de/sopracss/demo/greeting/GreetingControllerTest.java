@@ -54,7 +54,6 @@ class GreetingControllerTest {
                 .andExpect(content().string("Guude, John Quote of the Day: Test Quote"));
     }
 
-
     @Test
     void testControllerFunction() throws Exception {
         client.perform(get("/greeting").param("myname", "John"))

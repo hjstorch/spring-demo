@@ -30,7 +30,7 @@ public class GreetingController {
     }
 
     @GetMapping(value = {"/greeting",}, produces = "text/plain")
-    public String greetingParam(@RequestParam(value = "myname", defaultValue = "Welt") String name) {
+    public String greetingParam(@RequestParam(value = "myname", defaultValue = "Welt", required = false) String name) {
         return getGreetingAndQuote(name);
     }
 
