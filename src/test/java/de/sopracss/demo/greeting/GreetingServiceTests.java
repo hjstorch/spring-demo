@@ -7,30 +7,30 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class GreetingServiceTests {
+class GreetingServiceTests {
 
     private GreetingService sut;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         sut = new GreetingService();
     }
 
     @Test
-    public void testGreeting() {
+    void testGreeting() {
         assertThat(sut.getGreeting("John")).isEqualTo("Hello John");
     }
 
     @Test
-    public void testGreetingThrowsWhenNameIsNull() {
+    void testGreetingThrowsWhenNameIsNull() {
         assertThrows(IllegalArgumentException.class,() -> sut.getGreeting(null));
     }
     @Test
-    public void testGreetingThrowsWhenNameIsEmpty() {
+    void testGreetingThrowsWhenNameIsEmpty() {
         assertThrows(IllegalArgumentException.class,() -> sut.getGreeting(""));
     }
     @Test
-    public void testGreetingThrowsWhenNameIsWhitespace() {
+    void testGreetingThrowsWhenNameIsWhitespace() {
         assertThrows(IllegalArgumentException.class,() -> sut.getGreeting(" "));
     }
 }
