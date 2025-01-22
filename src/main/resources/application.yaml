@@ -11,7 +11,6 @@ spring:
 
 demo:
   greeting: Hallo
-  user.file: "classpath:user/users.json"
 
 logging:
   level:
