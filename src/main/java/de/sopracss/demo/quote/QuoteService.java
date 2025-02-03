@@ -26,6 +26,7 @@ public class QuoteService {
 
     public String getQuote() {
         Quote[] quotes = restTemplate.getForObject(quoteApi + quotePath, Quote[].class);
+        //noinspection DataFlowIssue
         return Optional.ofNullable(quotes[0])
                 .map(Quote::getContent)
                 .orElse("No quote available");

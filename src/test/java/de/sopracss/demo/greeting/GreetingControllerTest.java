@@ -39,6 +39,7 @@ class GreetingControllerTest {
         when(quoteService.getQuote()).thenReturn("Test Quote");
         when(greetingService.getGreeting("John")).thenReturn("Guude, John");
         when(greetingService.getGreeting(null)).thenThrow(new IllegalArgumentException("Name must not be empty"));
+        when(greetingService.getGreeting("")).thenThrow(new IllegalArgumentException("Name must not be empty"));
     }
 
 
