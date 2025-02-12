@@ -30,7 +30,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-batch'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'org.postgresql:postgresql'
 //    runtime 'com.h2database:h2'
