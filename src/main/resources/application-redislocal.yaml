@@ -1,9 +1,0 @@
-demo:
-  cache:
-    redis:
-      enabled: true
-
-spring:
-  cache:
-    redis:
-      time-to-live: 60

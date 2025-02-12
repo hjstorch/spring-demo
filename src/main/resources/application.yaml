@@ -8,12 +8,6 @@ application:
 spring:
     application:
       name: demo
-    batch:
-      jdbc:
-        initialize-schema: always
-      job:
-        enabled: true
-        name: taxJob
 
 demo:
   greeting: Hallo
