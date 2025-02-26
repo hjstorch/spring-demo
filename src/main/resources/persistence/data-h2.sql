@@ -80,7 +80,7 @@ VALUES
     (RANDOM_UUID(), 'Product 59', 'Description 59', 89.99),
     (RANDOM_UUID(), 'Product 61', 'Description 61', 9.99),
     (RANDOM_UUID(), 'Product 62', 'Description 62', 19.99),
-    (RANDOM_UUID(), 'Product 63', 'Description 63', 29.99,),
+    (RANDOM_UUID(), 'Product 63', 'Description 63', 29.99),
     (RANDOM_UUID(), 'Product 64', 'Description 64', 39.99),
     (RANDOM_UUID(), 'Product 65', 'Description 65', 49.99),
     (RANDOM_UUID(), 'Product 66', 'Description 66', 59.99),
