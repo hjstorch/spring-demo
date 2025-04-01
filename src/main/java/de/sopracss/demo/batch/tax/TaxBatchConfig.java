@@ -1,6 +1,7 @@
 package de.sopracss.demo.batch.tax;
 
 import de.sopracss.demo.persistence.entity.TaxEntity;
+import de.sopracss.demo.persistence.repository.TaxRepository;
 import jakarta.persistence.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -9,6 +10,8 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
+import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +22,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-// not necessary > SpringBoot3
+// not necessary > SpringBoot3/SpringBatch5
 // @EnableBatchProcessing
 public class TaxBatchConfig {
 
@@ -64,7 +67,7 @@ public class TaxBatchConfig {
                 .name("taxreader")
                 .entityManagerFactory(this.entityManagerFactory)
                 .queryString("SELECT t FROM TaxEntity t")
-                .pageSize(100)
+                .pageSize(1)
                 .build();
     }
 
@@ -72,6 +75,25 @@ public class TaxBatchConfig {
     public ItemWriter<TaxEntity> taxWriter() {
         return new JpaItemWriterBuilder<TaxEntity>()
                 .entityManagerFactory(this.entityManagerFactory)
+                .build();
+    }
+
+
+    // Alternative reader and writer using the JPARepository directly
+    // this does not need an EntityManager
+    @Bean
+    public ItemReader<TaxEntity> taxRepositoryReader(TaxRepository taxRepository) {
+        return new RepositoryItemReaderBuilder<TaxEntity>()
+                .name("taxrepositoryreader")
+                .repository(taxRepository)
+                .pageSize(1)
+                .build();
+    }
+
+    @Bean
+    public ItemWriter<TaxEntity> taxRepositoryWriter(TaxRepository taxRepository) {
+        return new RepositoryItemWriterBuilder<TaxEntity>()
+                .repository(taxRepository)
                 .build();
     }
 
