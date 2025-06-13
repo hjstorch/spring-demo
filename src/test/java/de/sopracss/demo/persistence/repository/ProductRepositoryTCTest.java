@@ -42,8 +42,7 @@ class ProductRepositoryTCTest {
             .withDatabaseName("test")
             .withUsername("test")
             .withPassword("test")
-            .withExposedPorts(5432)
-            ;
+            .withExposedPorts(5432);
 
     @Test
     void testReadAll() {
