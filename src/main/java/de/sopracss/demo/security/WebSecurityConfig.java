@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -36,12 +37,12 @@ public class WebSecurityConfig {
 
     @Bean
     @Scope("prototype")
-    public MvcRequestMatcher.Builder mvcMatcher(HandlerMappingIntrospector introspector) {
-        return new MvcRequestMatcher.Builder(introspector);
+    public PathPatternRequestMatcher.Builder patternMatcher(HandlerMappingIntrospector introspector) {
+        return PathPatternRequestMatcher.withDefaults();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder matcher) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, PathPatternRequestMatcher.Builder matcher) throws Exception {
         http
                 // ...
                 .authorizeHttpRequests( authorizeRequestCustomizer ->
@@ -49,8 +50,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                                 .requestMatchers("/greeting").permitAll()
                                 .requestMatchers("/greeting/**").permitAll()
-                                .requestMatchers(matcher.pattern("/greetingRest")).permitAll()
-                                .requestMatchers(matcher.pattern("/user")).hasRole(Roles.USER.name())
+                                .requestMatchers(matcher.matcher("/greetingRest")).permitAll()
+                                .requestMatchers(matcher.matcher("/user")).hasRole(Roles.USER.name())
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
