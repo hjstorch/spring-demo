@@ -1,6 +1,7 @@
 package de.sopracss.demo.security;
 
 import de.sopracss.demo.user.service.UserService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,13 +20,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.io.IOException;
 import java.util.*;
@@ -37,7 +36,7 @@ public class WebSecurityConfig {
 
     @Bean
     @Scope("prototype")
-    public PathPatternRequestMatcher.Builder patternMatcher(HandlerMappingIntrospector introspector) {
+    public PathPatternRequestMatcher.Builder patternMatcher() {
         return PathPatternRequestMatcher.withDefaults();
     }
 
