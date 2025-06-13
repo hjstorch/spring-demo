@@ -1,7 +1,6 @@
 package de.sopracss.demo.security;
 
 import de.sopracss.demo.user.service.UserService;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
