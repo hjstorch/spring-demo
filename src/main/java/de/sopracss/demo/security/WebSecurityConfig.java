@@ -49,7 +49,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/greeting").permitAll()
                                 .requestMatchers("/greeting/**").permitAll()
                                 .requestMatchers(matcher.matcher("/greetingRest")).permitAll()
-                                .requestMatchers(matcher.matcher("/user")).hasRole(Roles.USER.name())
+                                //.requestMatchers(matcher.matcher("/user")).hasRole(Roles.USER.name())
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
@@ -97,7 +97,7 @@ public class WebSecurityConfig {
         auth.inMemoryAuthentication()
                 .passwordEncoder(defaultDelegatingPasswordEncoder)
                 .withUser("user").password("user").roles(Roles.USER.name()).and()
-                .withUser("admin").password("admin").roles(Roles.ADMIN.name());
+                .withUser("admin").password("admin").roles(Roles.USER.name(), Roles.ADMIN.name());
     }
 
     @Bean
