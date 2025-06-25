@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -20,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest(
     properties = {
-            "spring.datasource.url=jdbc:tc:postgresql:16-alpine://localhost:5432/test",
+            "spring.datasource.url=jdbc:tc:postgresql:17.5-alpine://localhost:5432/test",
             "spring.jpa.hibernate.ddl-auto=create-drop",
             "spring.datasource.username=test",
             "spring.datasource.password=test",
@@ -38,7 +37,7 @@ class ProductRepositoryTCTest {
     private ProductRepository repository;
 
     @Container
-    private final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
+    private final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17.5-alpine")
             .withDatabaseName("test")
             .withUsername("test")
             .withPassword("test")
