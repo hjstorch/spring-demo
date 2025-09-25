@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.4.1'
+    id 'org.springframework.boot' version '3.5.6'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
     id 'org.openapi.generator' version '7.10.0'
@@ -11,7 +11,10 @@ group = 'de.soprasteria.css'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '21'
+    toolchain {
+        setLanguageVersion(JavaLanguageVersion.of(25))
+    }
+    sourceCompatibility = '25'
 }
 
 configurations {
