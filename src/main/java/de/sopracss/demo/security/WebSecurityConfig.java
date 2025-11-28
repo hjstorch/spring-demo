@@ -19,7 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -36,12 +36,12 @@ public class WebSecurityConfig {
 
     @Bean
     @Scope("prototype")
-    public MvcRequestMatcher.Builder mvcMatcher(HandlerMappingIntrospector introspector) {
-        return new MvcRequestMatcher.Builder(introspector);
+    public PathPatternRequestMatcher.Builder pathPatternRequestMatcherBuilder() {
+        return PathPatternRequestMatcher.withDefaults();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder matcher) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, PathPatternRequestMatcher.Builder matcherBuilder) throws Exception {
         http
                 // ...
                 .authorizeHttpRequests( authorizeRequestCustomizer ->
@@ -49,10 +49,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                                 .requestMatchers("/greeting").permitAll()
                                 .requestMatchers("/greeting/**").permitAll()
-                                .requestMatchers(matcher.pattern("/greetingRest")).permitAll()
-                                .requestMatchers(matcher.pattern("/user")).hasRole(Roles.USER.name())
-                                .requestMatchers("/actuator").permitAll()
-                                .requestMatchers("/actuator/**").permitAll()
+                                .requestMatchers(matcherBuilder.matcher("/greetingRest")).permitAll()
+                                .requestMatchers(matcherBuilder.matcher("/user")).hasRole(Roles.USER.name())
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
@@ -100,7 +98,7 @@ public class WebSecurityConfig {
         auth.inMemoryAuthentication()
                 .passwordEncoder(defaultDelegatingPasswordEncoder)
                 .withUser("user").password("user").roles(Roles.USER.name()).and()
-                .withUser("admin").password("admin").roles(Roles.ADMIN.name());
+                .withUser("admin").password("admin").roles(Roles.USER.name(), Roles.ADMIN.name());
     }
 
     @Bean
