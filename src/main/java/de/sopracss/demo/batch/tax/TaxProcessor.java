@@ -2,7 +2,7 @@ package de.sopracss.demo.batch.tax;
 
 
 import de.sopracss.demo.persistence.entity.TaxEntity;
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;

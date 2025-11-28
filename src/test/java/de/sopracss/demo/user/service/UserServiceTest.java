@@ -1,11 +1,12 @@
 package de.sopracss.demo.user.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.sopracss.demo.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.Resource;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;

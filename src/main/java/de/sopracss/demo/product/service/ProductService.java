@@ -56,9 +56,17 @@ public class ProductService {
                 .build();
     }
 
+    private ProductEntity mapEntity (Product product) {
+        ProductEntity entity = new ProductEntity();
+        entity.setName(product.getName());
+        entity.setDescription(product.getDescription());
+        entity.setPrice(product.getPrice());
+        return entity;
+    }
+
     @CacheEvict(cacheNames ="product", key="'AllProducts'")
     public void addProduct(Product product) {
-        productRepository.save(new ProductEntity());
+        productRepository.save(mapEntity(product));
     }
 
     @CacheEvict(cacheNames = "product", allEntries = true)

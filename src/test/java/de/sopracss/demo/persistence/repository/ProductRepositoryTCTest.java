@@ -1,11 +1,12 @@
 package de.sopracss.demo.persistence.repository;
 
+import de.sopracss.demo.persistence.DatabaseConfiguration;
 import de.sopracss.demo.persistence.entity.ProductEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest(
     properties = {
-            "spring.datasource.url=jdbc:tc:postgresql:16-alpine://localhost:5432/test",
+            "spring.datasource.url=jdbc:tc:postgresql:17.5-alpine://localhost:5432/test",
             "spring.jpa.hibernate.ddl-auto=create-drop",
             "spring.datasource.username=test",
             "spring.datasource.password=test",
@@ -28,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql(scripts = {"classpath:testsql/insert_postgres.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = {"classpath:testsql/cleanup_postgres.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(DatabaseConfiguration.class)
 @Testcontainers
 class ProductRepositoryTCTest {
 
