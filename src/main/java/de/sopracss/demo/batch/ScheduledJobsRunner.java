@@ -4,7 +4,7 @@ package de.sopracss.demo.batch;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.JobExecutionException;
 import org.springframework.batch.core.job.parameters.JobParameters;
-import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +12,15 @@ import org.springframework.stereotype.Service;
 public class ScheduledJobsRunner {
 
     private final Job taxJob;
-    private final JobLauncher launcher;
+    private final JobOperator operator;
 
-    public ScheduledJobsRunner(Job taxJob, JobLauncher launcher) {
+    public ScheduledJobsRunner(Job taxJob, JobOperator operator) {
         this.taxJob = taxJob;
-        this.launcher = launcher;
+        this.operator = operator;
     }
 
     @Scheduled(cron = "0 0 23 * * *")
     public void runAtNight() throws JobExecutionException {
-        launcher.run(taxJob, new JobParameters());
+        operator.start(taxJob, new JobParameters());
     }
 }
