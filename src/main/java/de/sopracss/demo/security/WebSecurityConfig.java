@@ -35,12 +35,12 @@ public class WebSecurityConfig {
 
     @Bean
     @Scope("prototype")
-    public PathPatternRequestMatcher.Builder patternMatcher() {
+    public PathPatternRequestMatcher.Builder pathPatternRequestMatcherBuilder() {
         return PathPatternRequestMatcher.withDefaults();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, PathPatternRequestMatcher.Builder matcher) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, PathPatternRequestMatcher.Builder matcherBuilder) throws Exception {
         http
                 // ...
                 .authorizeHttpRequests( authorizeRequestCustomizer ->
@@ -48,8 +48,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                                 .requestMatchers("/greeting").permitAll()
                                 .requestMatchers("/greeting/**").permitAll()
-                                .requestMatchers(matcher.matcher("/greetingRest")).permitAll()
-                                //.requestMatchers(matcher.matcher("/user")).hasRole(Roles.USER.name())
+                                .requestMatchers(matcherBuilder.matcher("/greetingRest")).permitAll()
+                                .requestMatchers(matcherBuilder.matcher("/user")).hasRole(Roles.USER.name())
                                 .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
