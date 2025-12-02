@@ -3,7 +3,6 @@ package de.sopracss.demo.batch.tax;
 import de.sopracss.demo.persistence.entity.TaxEntity;
 import de.sopracss.demo.persistence.repository.TaxRepository;
 import jakarta.persistence.*;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -20,28 +19,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.util.Collections;
+
 @Configuration
-// not necessary > SpringBoot3/SpringBatch5
-// @EnableBatchProcessing
-@EnableBatchProcessing
 public class TaxBatchConfig {
 
     private final EntityManagerFactory entityManagerFactory;
     private final JobRepository jobRepository;
-    private final DataSourceTransactionManager transactionManager;
 
-    public TaxBatchConfig(EntityManagerFactory entityManagerFactory, JobRepository jobRepository, DataSourceTransactionManager transactionManager) {
+    public TaxBatchConfig(EntityManagerFactory entityManagerFactory, JobRepository jobRepository) {
         this.entityManagerFactory = entityManagerFactory;
         this.jobRepository = jobRepository;
-        this.transactionManager = transactionManager;
-    }
-
-    @Bean
-    public TaskExecutor simpleAsyncTaskExecutor() {
-        return new SimpleAsyncTaskExecutor("tax_batch");
     }
 
     @Bean
@@ -54,13 +46,15 @@ public class TaxBatchConfig {
 
     @Bean
     public Step taxStep(TaxProcessor taxProcessor, JobRepository jobRepository,
-                        PlatformTransactionManager transactionManager, TaskExecutor simpleAsyncTaskExecutor) {
+                        PlatformTransactionManager transactionManager,
+                        TaskExecutor simpleAsyncTaskExecutor,
+                        ItemReader<TaxEntity> taxReader, ItemWriter<TaxEntity> taxWriter) {
         return new StepBuilder("tax", jobRepository)
                 .<TaxEntity, TaxEntity>chunk(1)
                 .transactionManager(transactionManager)
-                .reader(taxReader())
+                .reader(taxReader)
                 .processor(taxProcessor)
-                .writer(taxWriter())
+                .writer(taxWriter)
                 .taskExecutor((AsyncTaskExecutor) simpleAsyncTaskExecutor)
                 .build()
         ;
@@ -91,7 +85,9 @@ public class TaxBatchConfig {
         return new RepositoryItemReaderBuilder<TaxEntity>()
                 .name("taxrepositoryreader")
                 .repository(taxRepository)
+                .methodName("findAll")
                 .pageSize(1)
+                .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
                 .build();
     }
 
