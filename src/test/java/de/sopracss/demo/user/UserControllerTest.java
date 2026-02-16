@@ -28,9 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @Import({WebSecurityConfig.class, WebExceptionHandler.class})
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc()
 @ActiveProfiles("unittest")
-class UserControllerTest {
+public class UserControllerTest {
 
     private final String userJson = """
             {"username":"zwylde","firstname":"Zak","lastname":"Wylde","email":"zak@bls.com"}
