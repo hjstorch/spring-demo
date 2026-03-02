@@ -11,7 +11,7 @@ start with: `docker-compose up`
 ### use
 Use these URLs and credentials to reach the applications:  
 **Prometheus:** http://localhost:9090 (no user/password)   
-A ready-to-use configuration is already provided with the `prometheus.yml`. It will scrape your application metrics 
+A configuration is already provided with the `prometheus.yml`. Add your scraper config
 every 30 seconds.   
 **Grafana:** http://localhost:3000 (admin:admin)  
 with the very first start you will need to add the prometheus container as a datasource. 
