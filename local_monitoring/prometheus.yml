@@ -5,10 +5,4 @@ global:
 # A list of scrape configurations.
 scrape_configs:
   # The job name assigned to scraped metrics by default.
-  - job_name: 'spring-demo'
-    scheme: http
-    metrics_path: '/actuator/prometheus'
-    tls_config:
-      insecure_skip_verify: true
-    static_configs:
-      - targets: ['host.docker.internal:8088']
+  # add prometheus scraper config here
